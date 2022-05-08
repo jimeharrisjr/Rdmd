@@ -42,8 +42,8 @@ getAMatrix<-function(data,p=1){
   A<- kdmd(x)
   return(A)
 }
-#' @export
-predict.kdmd<-function(A,...){UseMethod('predict')}
+
+
 #' Predict from a Koopman Matrix
 #'
 #' @param A the Koopman Matrix for prediction
@@ -62,7 +62,7 @@ predict.kdmd<-function(A,...){UseMethod('predict')}
 #' predict(A,m,1)
 #' @importFrom pracma pinv
 #' @export
-predict<-function(A,data,l,p=1){
+predict.kdmd<-function(A,data,l,p=1){
   len_predict<-l
   t<-dim(data)[2]
   N<-dim(data)[1]
