@@ -48,4 +48,46 @@ predict(A,m,9)
 [3,]    3    4    5    6    7    8    9   10   11    12    13    14    15    16    17    18    19    20    21
 ```
 
+Let's take a slightly more complex example:
 
+```
+m<-matrix(ncol=100,nrow=3)
+x<-1:100
+m[1,]<-sin(x*pi/10)
+m[2,]<-sin(1+x*pi/10)
+m[3,]<-sin(2+x*pi/10)
+```
+ This generates a matrix of sin waves:
+ ![](img/sin_plot1.png)
+
+Let's predict the next 100 elements:
+
+```
+A<-getAMatrix(m)
+m2<-predict(A,m,100)
+plot(m2[1,], type='l')
+lines(m2[2,], type='l')
+lines(m2[3,], type='l')
+```
+
+![](img/sin_plotpredicted.png)
+
+Now let's add a small amount of Gaussian noise
+
+```
+m[3,]<-m[3,]+rnorm(100,sd=.02)
+m[2,]<-m[2,]+rnorm(100,sd=.02)
+m[1,]<-m[1,]+rnorm(100,sd=.02)
+```
+![](img/sin_plot_noise.png)
+
+When we predict again, the predicted columns (101-200) have "rejected" the noise, acting as a filter:
+
+```
+A<-getAMatrix(m)
+m2<-predict(A,m,100)
+plot(m2[1,], type='l')
+lines(m2[2,], type='l')
+lines(m2[3,], type='l')
+```
+![](img/sin_plot_predict_noise.png)
