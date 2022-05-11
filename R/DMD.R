@@ -5,9 +5,9 @@ kdmd<-function(x){
 }
 #' Create a Koopman Matrix
 #'
-#' @param data the matrix data for which you wish to predict future columns
+#' @param data the matrix data for which you wish to predict future columns expressed as a 2D matrix or data frame
 #' @param p The Percentage of explanation of the SVD required (default=1)
-#' @param comp The number of components of the SVD to keep. Default is null, overrides p, if set.
+#' @param comp The number of components of the SVD to keep (>1). Default is null, overrides p, if set.
 #' Returns an object of class kdmd
 #' @examples
 #' ## Not run:
@@ -18,13 +18,19 @@ kdmd<-function(x){
 #' A<-getAMatrix(m)
 #' @importFrom pracma pinv
 #' @export
-getAMatrix<-function(data,p=1, comp=NULL){
+getAMatrix<-function(data,p=1, comp=NA){
+  if (!is.matrix(data) & !is.data.frame(data)) stop('data must be a numeric matrix or a data frame')
+  data<-as.matrix(data)
+  dims<-dim(data)
+  if (!(dims[1]>1 & dims[2]>1)) stop ('matrix must have two dimensions (2x2 or greater)')
+  if (p<=0 | p>1) stop (paste('p=',p,'p value must be within the range (0,1]'))
   x<-data[,-ncol(data)]
   y<-data[,-1]
   wsvd<-base::svd(x)
-  if (!is.null(comp)){
-    r<-comp
-    if (comp>length(wsvd$d)){
+  if (!is.na(comp)){
+    r<-as.integer(comp)
+    if (r<=1){warning('component values below 2 are not supported. Defaulting to 2'); r<-2}
+    if (r>length(wsvd$d)){
       warning('Specified number of components is greater than possible. Ignoring extra')
       r<-length(wsvd$d)
     }
@@ -55,8 +61,8 @@ getAMatrix<-function(data,p=1, comp=NULL){
 #' Predict from a Koopman Matrix
 #'
 #' @param A the Koopman Matrix for prediction
-#' @param data the matrix data for which you wish to predict future columns
-#' @param l the length of the predictions (number of columns to predict)
+#' @param data the matrix data for which you wish to predict future columns - must be conformable to A
+#' @param l the length of the predictions (number of columns to predict - default=1)
 #' Returns a matrix with l additional columns
 #' @examples
 #' ## Not run:
@@ -69,8 +75,10 @@ getAMatrix<-function(data,p=1, comp=NULL){
 #' predict(A,m,1)
 #' @importFrom pracma pinv
 #' @export
-predict.kdmd<-function(A,data,l){
+predict.kdmd<-function(A,data,l=1){
   if (!'kdmd' %in% class(A)){ stop('A must be a kdmd object generated with getAMatrix')}
+  if (!is.matrix(data) & !is.data.frame(data)) stop('data must be a numeric matrix or a data frame')
+  data<-as.matrix(data)
   len_predict<-l
   t<-dim(data)[2]
   N<-dim(data)[1]

@@ -2,25 +2,19 @@
 % Please edit documentation in R/DMD.R
 \name{predict.kdmd}
 \alias{predict.kdmd}
-\title{#' @export
-predict.kdmd<-function(A,...){UseMethod('predict')}
-Predict from a Koopman Matrix}
+\title{Predict from a Koopman Matrix}
 \usage{
-\method{predict}{kdmd}(A, data, l, p = 1)
+\method{predict}{kdmd}(A, data, l = 1)
 }
 \arguments{
 \item{A}{the Koopman Matrix for prediction}
 
-\item{data}{the matrix data for which you wish to predict future columns}
+\item{data}{the matrix data for which you wish to predict future columns - must be conformable to A}
 
-\item{l}{the length of the predictions (number of columns to predict)}
-
-\item{p}{The Percentage of explanation of the SVD required (default=1)
+\item{l}{the length of the predictions (number of columns to predict - default=1)
 Returns a matrix with l additional columns}
 }
 \description{
-#' @export
-predict.kdmd<-function(A,...){UseMethod('predict')}
 Predict from a Koopman Matrix
 }
 \examples{
@@ -30,6 +24,6 @@ m<-matrix(ncol=10,nrow=3)
 m[1,]<-1:10
 m[2,]<-2:11
 m[3,]<-3:12
-A<-getAmatrix(m)
+A<-getAMatrix(m)
 predict(A,m,1)
 }

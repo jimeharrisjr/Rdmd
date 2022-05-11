@@ -4,12 +4,14 @@
 \alias{getAMatrix}
 \title{Create a Koopman Matrix}
 \usage{
-getAMatrix(data, p = 1)
+getAMatrix(data, p = 1, comp = NA)
 }
 \arguments{
-\item{data}{the matrix data for which you wish to predict future columns}
+\item{data}{the matrix data for which you wish to predict future columns expressed as a 2D matrix or data frame}
 
-\item{p}{The Percentage of explanation of the SVD required (default=1)
+\item{p}{The Percentage of explanation of the SVD required (default=1)}
+
+\item{comp}{The number of components of the SVD to keep (>1). Default is null, overrides p, if set.
 Returns an object of class kdmd}
 }
 \description{
@@ -21,5 +23,5 @@ m<-matrix(ncol=10,nrow=3)
 m[1,]<-1:10
 m[2,]<-2:11
 m[3,]<-3,12
-A<-getAmatrix(m)
+A<-getAMatrix(m)
 }

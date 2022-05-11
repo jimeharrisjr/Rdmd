@@ -1,7 +1,7 @@
 Package: Rdmd
 Type: Package
 Title: ML Prediction using Koopman Dynamic Mode Decomposition
-Version: 0.1.4
+Version: 0.2.0
 Author: James Harris
 Maintainer: James Harris <jimeharrisjr@gmail.com>
 Description: The Package creates a Koopman matrix and predicts from it
